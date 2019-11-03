@@ -6,6 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import svm
 
+
 #http://www.handsonmachinelearning.com/blog/McTKK/python-one-hot-encoding-with-scikit-learn
 
 #Load dataset
@@ -74,6 +75,8 @@ from sklearn import svm
 
 import mlflow
 import mlflow.sklearn
+mlflow.set_tracking_uri('http://127.0.0.1:5000');
+
 #Create a svm Classifier
 C_params=[0.1,0.5,0.8,1,3,4,10,20]
 max =0
@@ -95,11 +98,6 @@ for i in C_params:
         mlflow.log_param( " degree of polynomial " , d )
         mlflow.log_metric("roc ", tmp )
         mlflow.log_metric('accuracy ' , metrics.accuracy_score(y_test, y_pred))
-        print ('------------------------------------');
-
-        print (mlflow.__version__)
-        print ('------------------------------------');
-        mlflow.sklearn.log_model(clf, "model", registered_model_name="nba predictions SV")
         if tmp > max:
             max = tmp
             c_max = i
@@ -116,6 +114,8 @@ print ('maximum ' , max , 'c_max', c_max,'d_max',d_max,'acuracy',ac_max )
 print ('------------------------------------');
 
 print (mlflow.__version__)
+mlflow.sklearn.log_model(clf, "model_2")
+
 print ('------------------------------------');
 
 
