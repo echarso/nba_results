@@ -94,10 +94,6 @@ for i in C_params:
         y_pred = clf.predict(X_test)
 
         tmp =metrics.roc_auc_score(y_test, y_pred);
-        mlflow.log_param( "C penalty " , i )
-        mlflow.log_param( " degree of polynomial " , d )
-        mlflow.log_metric("roc ", tmp )
-        mlflow.log_metric('accuracy ' , metrics.accuracy_score(y_test, y_pred))
         if tmp > max:
             max = tmp
             c_max = i
@@ -114,6 +110,11 @@ print ('maximum ' , max , 'c_max', c_max,'d_max',d_max,'acuracy',ac_max )
 print ('------------------------------------');
 
 print (mlflow.__version__)
+mlflow.log_param( "C penalty ", c_max )
+mlflow.log_param( "degree of polynomial " , d_max )
+mlflow.log_metric("roc ", tmp )
+mlflow.log_metric('accuracy ' , metrics.accuracy_score(y_test, y_pred))
+
 mlflow.sklearn.log_model(clf, "model_2")
 
 print ('------------------------------------');
