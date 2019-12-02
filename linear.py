@@ -83,42 +83,16 @@ max =0
 c_max = 0
 d_max = 0
 ac_max=0
-for i in C_params:
-    for d in [1,2,3,4,5]:
-        clf = svm.SVC(cache_size=7000,kernel='rbf',C=i,degree=d) # Linear Kernel
-        #clf =LinearSVC()
-        #clf = LogisticRegression(penalty = 'l2', C = 0.1,random_state = 0)
-        #Train the model using the training sets
-        #clf = GaussianNB()
-        clf.fit(X_train, y_train)
-        y_pred = clf.predict(X_test)
 
-        tmp =metrics.roc_auc_score(y_test, y_pred);
-        if tmp > max:
-            max = tmp
-            c_max = i
-            d_max = d
-            ac_max = metrics.accuracy_score(y_test, y_pred)
-        # Model Accuracy: how often is the classifier correct?
-        #print(i,d,"=>Accuracy:",metrics.accuracy_score(y_test, y_pred))
-        #print(i,d,"=>Precision:",metrics.precision_score(y_test, y_pred))
-        #print(i,d,"=>Recall:",metrics.recall_score(y_test, y_pred))
-        #print(i,d,"=>f1 score:",metrics.f1_score(y_test, y_pred, average='macro'))
-        #print (i,d,"=>roc_auc_score:", metrics.roc_auc_score(y_test, y_pred))
+clf =LinearSVC().fit(X_train, y_train)
+y_pred = clf.predict(X_test)
 
-print ('maximum ' , max , 'c_max', c_max,'d_max',d_max,'acuracy',ac_max )
-print ('------------------------------------');
+tmp =metrics.roc_auc_score(y_test, y_pred);
+accuracy = metrics.accuracy_score(y_test, y_pred)
 
-print (mlflow.__version__)
-mlflow.log_param( "C-penalty ", c_max )
-mlflow.log_param( "degree of polynomial " , d_max )
 mlflow.log_metric("roc ", tmp )
-mlflow.log_metric('accuracy ' , metrics.accuracy_score(y_test, y_pred))
+mlflow.log_metric('accuracy ' , accuracy)
 
-mlflow.sklearn.log_model(clf, "model_2")
+mlflow.sklearn.log_model(clf, "model LinearSVC 1")
 
 print ('------------------------------------');
-
-
-pd.DataFrame(y_pred).to_csv('predictions.csv')
-pd.DataFrame(y_train).to_csv('train_set.csv')
